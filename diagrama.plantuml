@@ -1,0 +1,107 @@
+@startuml Corrector Examenes
+
+class Examen{
+    preguntas: Pregunta[]
+    criterioCorreccion: Criterio
+    notaAprobacion: float
+
+    getEnunciado() : Pregunta[]
+    - notaTotal(resolucion: Respuesta[]): float
+    aprueba(resolucion: Respuesta[]): boolean
+}
+
+Examen --> Criterio
+Examen --> "*" Pregunta
+Examen ..> "*" Respuesta
+interface Pregunta{
+    respuestaCorrecta(respuesta: Respuesta): boolean
+}
+Pregunta <|-- VoF 
+Pregunta <|-- MultipleChoice
+Pregunta <|-- PreguntaConcreta
+
+
+class RespuestaVoF{
+    respuesta: boolean
+
+}
+
+class RespuestaMultipleChoice{
+    respuesta: int
+}
+
+class RespuestaPreguntaConcreta{
+    respuesta: string
+}
+
+Respuesta <|.. RespuestaVoF 
+Respuesta <|.. RespuestaMultipleChoice
+Respuesta <|.. RespuestaPreguntaConcreta
+
+
+interface Respuesta{
+    esCorrecta(): boolean
+}
+
+class VoF{
+    peso: int
+    respuestaCorrecta: RespuestaVoF
+
+    responder(): RespuestaVoF    
+
+}
+class MultipleChoice{
+    peso: int
+    respuestaCorrecta: RespuestaMultipleChoice
+
+    responder(): RespuestaMultipleChoice    
+
+}
+class PreguntaConcreta{
+    peso: int
+    respuestaCorrecta: RespuestaPreguntaConcreta
+    
+    responder(): RespuestaPreguntaConcreta    
+}
+
+interface Criterio{
+    calcularNota(resolucion: Respuesta[]): float
+}
+Criterio <|.. RestaPuntos
+Criterio <|.. TablaConversion
+Criterio <|.. ReglaDe3
+Criterio <|.. MetaCriterio
+
+class RestaPuntos{
+    cantidadDePuntos: int
+    calcularNota(resolucion: Respuesta[]): float
+}
+
+class TablaConversion{
+    tablaConversion: [int][float]
+    calcularNota(resolucion: Respuesta[]): float
+
+}
+
+class ReglaDe3{
+    calcularNota(resolucion: Respuesta[]): float
+}
+
+abstract class MetaCriterio{
+    criterios: Criterio[]
+    calcularNota(resolucion: Respuesta[]): float
+    {abstract} seleccionCriterios(notasCriterios: float[]): float
+}
+
+MetaCriterio <|-- NotaMasAlta
+MetaCriterio <|-- Promedio
+
+class NotaMasAlta{
+    seleccionCriterios(notasCriterios: float[]): float
+}
+class Promedio{
+    seleccionCriterios(notasCriterios: float[]): float
+}
+
+
+@enduml
