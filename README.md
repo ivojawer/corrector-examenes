@@ -1,4 +1,5 @@
 # Corrector de Examenes
+![diagrama](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/ivojawer/corrector-examenes/master/diagrama.plantuml)
 
 ## Punto 3
 
